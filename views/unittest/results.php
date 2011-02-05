@@ -73,7 +73,60 @@
 							<?php if ($result['data_set']) : ?>
 							<span class="test-data-set"> <?php echo __('with data set')?> <span><?php echo $result['data_set']?></span></span>
 							<?php endif ?>
-							<span class="test-message"><?php echo htmlentities($result['message'])?></span>
+							<?php if (! $result['exception']) : ?>
+							<span class="test-message"><?php echo htmlentities($result['message']);?></span>
+							<?php else : ?>
+							<div class="test-exception">
+							<?php
+							{
+								$e = $result['exception'];
+								$type    = get_class($e);
+								$code    = $e->getCode();
+								$message = $e->getMessage();
+								$file    = $e->getFile();
+								$line    = $e->getLine();
+
+								// Get the exception backtrace
+								$trace = $e->getTrace();
+								
+								if ($e instanceof ErrorException)
+								{
+									if (isset(Kohana_Exception::$php_errors[$code]))
+									{
+										// Use the human-readable error name
+										$code = Kohana_Exception::$php_errors[$code];
+									}
+
+									if (version_compare(PHP_VERSION, '5.3', '<'))
+									{
+										// Workaround for a bug in ErrorException::getTrace() that exists in
+										// all PHP 5.2 versions. @see http://bugs.php.net/bug.php?id=45895
+										for ($i = count($trace) - 1; $i > 0; --$i)
+										{
+											if (isset($trace[$i - 1]['args']))
+											{
+												// Re-position the args
+												$trace[$i]['args'] = $trace[$i - 1]['args'];
+
+												// Remove the args
+												unset($trace[$i - 1]['args']);
+											}
+										}
+									}
+								}
+								
+								echo View::factory('kohana/error', array(
+									'type'    => $type,
+									'code'    => $code,
+									'message' => $message,
+									'file'    => $file,
+									'line'    => $line,
+									'trace'   => $trace,
+								)); 
+							}
+							?>
+							</div>
+							<?php endif ?>
 						</li>
 					<?php endforeach ?>
 				</ol>

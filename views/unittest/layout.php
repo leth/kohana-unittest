@@ -167,6 +167,10 @@
 				display: block;
 				color: #444;
 			}
+			div.test-exception {
+				font-weight: normal;
+				font-size: .9em;
+			}
 			div.big-message {
 				font-size: 2em;
 				text-align: center;

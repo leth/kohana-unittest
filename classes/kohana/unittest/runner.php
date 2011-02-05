@@ -226,6 +226,7 @@ class Kohana_Unittest_Runner implements PHPUnit_Framework_TestListener {
 		$this->totals['errors']++;
 		$this->current['result'] = 'errors';
 		$this->current['message'] = $test->getStatusMessage();
+		$this->current['exception'] = $e;
 	}
 
 	public function addFailure(PHPUnit_Framework_Test $test, PHPUnit_Framework_AssertionFailedError $e, $time)
@@ -233,6 +234,7 @@ class Kohana_Unittest_Runner implements PHPUnit_Framework_TestListener {
 		$this->totals['failures']++;
 		$this->current['result'] = 'failures';
 		$this->current['message'] = $test->getStatusMessage();
+		$this->current['exception'] = $e;
 	}
 
 	public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
@@ -240,6 +242,7 @@ class Kohana_Unittest_Runner implements PHPUnit_Framework_TestListener {
 		$this->totals['incomplete']++;
 		$this->current['result'] = 'incomplete';
 		$this->current['message'] = $test->getStatusMessage();
+		$this->current['exception'] = $e;
 	}
 
 	public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
@@ -247,6 +250,7 @@ class Kohana_Unittest_Runner implements PHPUnit_Framework_TestListener {
 		$this->totals['skipped']++;
 		$this->current['result'] = 'skipped';
 		$this->current['message'] = $test->getStatusMessage();
+		$this->current['exception'] = $e;
 	}
 
 	public function startTest(PHPUnit_Framework_Test $test)
